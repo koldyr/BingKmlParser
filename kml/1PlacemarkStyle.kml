@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+    <Document>
+        <name>CIB_101</name>
+        <description>CatInBox Analyzer - CatPerils</description>
+        <Folder>
+            <name>Pol1_Site1</name>
+            <open>0</open>
+            <Folder>
+                <name>CatID_1</name>
+                <open>0</open>
+                <description>CatID_1</description>
+
+                <Placemark>
+                    <name>Point1</name>
+                    <description>"1941-3-25,M4.5,lon=139.020,lat=35.450,d=28km (JMA (decl))"</description>
+
+                    <Style>
+                        <IconStyle>
+                            <color>FFFF0000</color>
+                            <scale>0.500000</scale>
+                            <Icon>
+                                <href>http://maps.google.com/mapfiles/kml/shapes/shaded_dot.png</href>
+                            </Icon>
+                        </IconStyle>
+                    </Style>
+
+                    <Point>
+                        <coordinates>139.020000,35.450000,0</coordinates>
+                    </Point>
+                </Placemark>
+
+                <Placemark>
+                    <name>Point2</name>
+                    <description>"1950-7-20,M4.5,lon=139.030,lat=35.500,d=18km (JMA (decl))"</description>
+
+                    <Style>
+                        <IconStyle>
+                            <color>FF00FF00</color>
+                            <scale>0.500000</scale>
+                            <Icon>
+                                <href>http://maps.google.com/mapfiles/kml/shapes/donut.png</href>
+                            </Icon>
+                        </IconStyle>
+                    </Style>
+                    <Point>
+                        <coordinates>139.030000,35.500000,0</coordinates>
+                    </Point>
+                </Placemark>
+            </Folder>
+        </Folder>
+    </Document>
+</kml>

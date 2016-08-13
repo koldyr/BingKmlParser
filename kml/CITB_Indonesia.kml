@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document id="Banda Aceh" xsi:schemaLocation="http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd http://www.google.com/kml/ext/2.2 http://code.google.com/apis/kml/schema/kml22gx.xsd">
+	<name>CITB_Indonesia</name>
+	<open>1</open>
+	<Snippet maxLines="0"></Snippet>
+	<StyleMap id="PolyStyle013">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#PolyStyle011</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#PolyStyle012</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="PolyStyle014">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#PolyStyle010</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#PolyStyle01</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="PolyStyle011">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>1.6</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>00f0f0f0</color>
+		</PolyStyle>
+	</Style>
+	<Style id="PolyStyle012">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
+			<width>1.6</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>00f0f0f0</color>
+		</PolyStyle>
+	</Style>
+	<Style id="PolyStyle01">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff00ff00</color>
+			<width>1.7</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>00ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Style id="PolyStyle010">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff00ff00</color>
+			<width>1.7</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>00ffffff</color>
+		</PolyStyle>
+	</Style>
+	<Placemark id="ID_00001">
+		<name>Banda Aceh</name>
+		<Snippet maxLines="0"></Snippet>
+		<styleUrl>#PolyStyle013</styleUrl>
+		<MultiGeometry>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							93.31000000000012,4.519999999999925,0 97.04000000000013,0.7599999999999909,0 99.31999999999999,3.569999999999993,0 96.20999999999992,6.699999999999989,0 93.31000000000012,4.519999999999925,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</MultiGeometry>
+	</Placemark>
+	<Placemark id="ID_00001">
+		<name>West Sumatra</name>
+		<Snippet maxLines="0"></Snippet>
+		<styleUrl>#PolyStyle014</styleUrl>
+		<MultiGeometry>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							97.32999999999998,-1.110000000000014,0 100.2700000000001,-4.389999999999986,0 102.7599999999999,-1.92999999999995,0 99.84999999999997,1.139999999999986,0 97.32999999999998,-1.110000000000014,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</MultiGeometry>
+	</Placemark>
+</Document>
+</kml>

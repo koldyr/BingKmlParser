@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+    <Document>
+        <name>LMS</name>
+        <Folder>
+            <name>Locations</name>
+            <Style id="Exact">
+                <IconStyle>
+                    <Icon>
+                        <href>http://maps.google.com/mapfiles/ms/icons/red-dot.png</href>
+                    </Icon>
+                </IconStyle>
+            </Style>
+            <Style id="PostalCode">
+                <IconStyle>
+                    <Icon>
+                        <href>http://maps.google.com/mapfiles/ms/icons/orange-dot.png</href>
+                    </Icon>
+                </IconStyle>
+            </Style>
+            <Style id="City/Place">
+                <IconStyle>
+                    <Icon>
+                        <href>http://maps.google.com/mapfiles/ms/icons/yellow-dot.png</href>
+                    </Icon>
+                </IconStyle>
+            </Style>
+            [
+            <Placemark id="1582050">
+                <name>US-Missouri-Kanzas City-908-Baltimore Avenue</name>
+                <open>true</open>
+                <description>Location name: US-Missouri-Kanzas City-908-Baltimore Avenue<br/>Ref name: -<br/>Occupancy: University or college (including dormitories)<br/>Total TSI:
+                    51379950<br/>MD SI: 34253300<br/>BI SI: 17126650
+                    <br/>
+                </description>
+                <Point>
+                    <coordinates>-94.5844129,39.103242</coordinates>
+                </Point>
+                <styleUrl>#Exact</styleUrl>
+            </Placemark>
+            ,
+            <Placemark id="1582051">
+                <name>AU-New South Wales-Bourke-7-Mitchell Street</name>
+                <open>true</open>
+                <description>Location name: AU-New South Wales-Bourke-7-Mitchell Street<br/>Ref name: -<br/>Occupancy: University or college (including dormitories)<br/>Total TSI:
+                    2428125<br/>MD SI: 1618750<br/>BI SI: 809375
+                    <br/>
+                </description>
+                <Point>
+                    <coordinates>145.934545,-30.088089</coordinates>
+                </Point>
+                <styleUrl>#Exact</styleUrl>
+            </Placemark>
+            ]
+        </Folder>
+    </Document>
+</kml>  

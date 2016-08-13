@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+    <Document>
+        <Folder>
+            <Placemark>
+                <Point>
+                    <coordinates>-97.424394,25.866076,0.0</coordinates>
+                </Point>
+                <name>a</name>
+                <description>&lt;b&gt; Value&lt;/b&gt; = 1000</description>
+                <styleUrl>#styleUrl2</styleUrl>
+            </Placemark>
+            <Placemark>
+                <Point>
+                    <coordinates>-97.506272,25.894633,0.0</coordinates>
+                </Point>
+                <name>b</name>
+                <description>&lt;b&gt; Value&lt;/b&gt; = 200</description>
+                <styleUrl>#styleUrl3</styleUrl>
+            </Placemark>
+            <Placemark>
+                <Point>
+                    <coordinates>-97.506459,25.894699,0.0</coordinates>
+                </Point>
+                <name>c</name>
+                <description>&lt;b&gt; Value&lt;/b&gt; = 500</description>
+                <styleUrl>#styleUrl4</styleUrl>
+            </Placemark>
+            <Placemark>
+                <Point>
+                    <coordinates>-97.507604,25.895648,0.0</coordinates>
+                </Point>
+                <name>d</name>
+                <description>&lt;b&gt; Value&lt;/b&gt; = 300</description>
+                <styleUrl>#styleUrl5</styleUrl>
+            </Placemark>
+            <Placemark>
+                <Point>
+                    <coordinates>-97.451833,25.898375,0.0</coordinates>
+                </Point>
+                <name>e</name>
+                <description>&lt;b&gt; Value&lt;/b&gt; = 400</description>
+                <styleUrl>#styleUrl6</styleUrl>
+            </Placemark>
+            <Placemark>
+                <Point>
+                    <coordinates>-97.496631,25.899647,0.0</coordinates>
+                </Point>
+                <name>f</name>
+                <description>&lt;b&gt; Value&lt;/b&gt; =</description>
+                <styleUrl>#styleUrl7</styleUrl>
+            </Placemark>
+            <name>Excel File Excel_File_Excel_File_Excel_File_1point_15+</name>
+        </Folder>
+        <name>Excel File Excel_File_Excel_File_Excel_File_1point_15+</name>
+        <Style id="styleUrl2">
+            <IconStyle>
+                <scale>1.0</scale>
+                <color>ff001eff</color>
+            </IconStyle>
+        </Style>
+        <Style id="styleUrl3">
+            <IconStyle>
+                <scale>1.0</scale>
+                <color>ff00ddff</color>
+            </IconStyle>
+        </Style>
+        <Style id="styleUrl4">
+            <IconStyle>
+                <scale>1.0</scale>
+                <color>ff0080ff</color>
+            </IconStyle>
+        </Style>
+        <Style id="styleUrl5">
+            <IconStyle>
+                <scale>1.0</scale>
+                <color>ff00ddff</color>
+            </IconStyle>
+        </Style>
+        <Style id="styleUrl6">
+            <IconStyle>
+                <scale>1.0</scale>
+                <color>ff0080ff</color>
+            </IconStyle>
+        </Style>
+        <Style id="styleUrl7">
+            <IconStyle>
+                <scale>1.0</scale>
+                <color>ffffffff</color>
+            </IconStyle>
+        </Style>
+    </Document>
+</kml>

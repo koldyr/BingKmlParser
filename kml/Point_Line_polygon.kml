@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+    <Document>
+        <Folder>
+            <name>Search Results</name>
+        </Folder>
+        <Folder>
+            <Placemark>
+                <Polygon>
+                    <outerBoundaryIs>
+                        <LinearRing>
+                            <coordinates>23.4228515625,51.90361280788357,0.0 23.8623046875,54.17529672404642,0.0 27.7294921875,56.03522578369872,0.0
+                                31.2451171875,54.73730756865752,0.0 32.2998046875,53.291489065300226,0.0 29.68505859375,51.56341232867588,0.0 23.642578125,51.69979984974196,0.0
+                            </coordinates>
+                        </LinearRing>
+                    </outerBoundaryIs>
+                </Polygon>
+                <Polygon>
+
+                </Polygon>
+                <name>Polygon1</name>
+                <description></description>
+                <styleUrl>#styleUrladdLocation_45</styleUrl>
+            </Placemark>
+            <Placemark>
+                <LineString>
+                    <coordinates>23.8623046875,51.80861475198521,0.0 30.9375,55.73948169869349,0.0</coordinates>
+                </LineString>
+                <name>Line2</name>
+                <description></description>
+                <styleUrl>#styleUrladdLocation_23</styleUrl>
+            </Placemark>
+            <Placemark>
+                <Point>
+                    <coordinates>27.59765625,53.891391285752874,0.0</coordinates>
+                </Point>
+                <name>Point3</name>
+                <description></description>
+                <styleUrl>#styleUrladdLocation_01</styleUrl>
+            </Placemark>
+            <name>Marina in User Places</name>
+        </Folder>
+        <name>Test for Katya</name>
+        <Style id="styleUrladdLocation_45">
+            <LineStyle>
+                <width>3.0</width>
+                <color>ffcc3299</color>
+            </LineStyle>
+            <PolyStyle>
+                <fill>true</fill>
+                <outline>true</outline>
+                <color>ff507fff</color>
+            </PolyStyle>
+        </Style>
+        <Style id="styleUrladdLocation_23">
+            <LineStyle>
+                <width>3.0</width>
+                <color>ff00ff7f</color>
+            </LineStyle>
+        </Style>
+        <Style id="styleUrladdLocation_01">
+            <IconStyle>
+                <scale>1.0</scale>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/pal4/icon43.png</href>
+                </Icon>
+                <HotSpot>
+                    <x>16.0</x>
+                    <xunits>pixels</xunits>
+                    <y>16.0</y>
+                    <yunits>pixels</yunits>
+                </HotSpot>
+                <color>ff00ffff</color>
+            </IconStyle>
+        </Style>
+    </Document>
+</kml>
