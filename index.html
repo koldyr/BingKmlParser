@@ -34,11 +34,13 @@
                             }
                         }
 
-                        map.entities.push(item);
+                        if (item) {
+                            map.entities.push(item);
+                        }
                     });
 
                     var viewPort = Microsoft.Maps.LocationRect.fromLocations(allLocations);
-                    map.setView({bounds: viewPort});
+                    map.setView({bounds: viewPort, zoom: 16});
                 }, function (jqXHR, error) {
                     console.log(error);
                 });
