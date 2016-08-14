@@ -5,6 +5,11 @@ namespace com.koldyr {
         highlight: any;
     }
 
+    interface IStyleDTO {
+        styleMap?: IStyleMap;
+        options?: any;
+    }
+
     export class BingKmlParser {
 
         static ICON_URL: string = 'https://www.bingmapsportal.com/Content/images/poi_custom.png';
@@ -63,39 +68,19 @@ namespace com.koldyr {
                 const coordinates: JQuery = point.find('coordinates');
                 const vertices: Array<Microsoft.Maps.Location> = this.parseVertices(coordinates.html());
 
-                let pushpinOptions: Microsoft.Maps.IPushpinOptions = {icon: BingKmlParser.ICON_URL, anchor: new Microsoft.Maps.Point(12, 39)};
-
-                let mapped: IStyleMap;
+                let styleDTO: IStyleDTO = {
+                    options: {icon: BingKmlParser.ICON_URL, anchor: new Microsoft.Maps.Point(12, 39)}
+                };
                 if (placemarkDom) {
-                    const styleUrl = placemarkDom.find('styleUrl');
-                    if (styleUrl.length > 0) {
-                        const styleName: string = styleUrl.html().substr(1);
-
-                        pushpinOptions = this.styleMap[styleName];
-
-                        if (pushpinOptions) {
-                            mapped = <IStyleMap>pushpinOptions;
-                        } else {
-                            pushpinOptions = this.styles[styleName];
-                        }
-                    } else {
-                        const style = placemarkDom.find('Style');
-                        pushpinOptions = this.parseStyle(style);
-                    }
-
-                    const name = placemarkDom.find('name');
-                    if (name.length > 0) {
-                        console.log(name.html());
-                        pushpinOptions.title = name.html();
-                    }
+                    styleDTO = this.getOptions(placemarkDom, styleDTO.options);
                 }
 
                 let pushpin: Microsoft.Maps.Pushpin;
-                if (mapped) {
-                    pushpin = new Microsoft.Maps.Pushpin(vertices[0], mapped.normal);
-                    this.addMappedStyle(pushpin, mapped);
+                if (styleDTO.styleMap) {
+                    pushpin = new Microsoft.Maps.Pushpin(vertices[0], styleDTO.styleMap.normal);
+                    this.addMappedStyle(pushpin, styleDTO.styleMap);
                 } else {
-                    pushpin = new Microsoft.Maps.Pushpin(vertices[0], pushpinOptions);
+                    pushpin = new Microsoft.Maps.Pushpin(vertices[0], styleDTO.options);
                 }
                 return pushpin;
             } catch (e) {
@@ -118,34 +103,21 @@ namespace com.koldyr {
                 const coordinates: JQuery = line.find('coordinates');
                 const vertices: Array<Microsoft.Maps.Location> = this.parseVertices(coordinates.html());
 
-                let lineOptions: Microsoft.Maps.IPolylineOptions = {
-                    strokeColor: 'black', strokeThickness: 1
-                };
-
-                let mapped: IStyleMap;
-
-                if (placemarkDom) {
-                    const styleUrl = placemarkDom.find('styleUrl');
-                    if (styleUrl.length > 0) {
-                        const styleName: string = styleUrl.html().substr(1);
-                        lineOptions = this.styleMap[styleName];
-                        if (lineOptions) {
-                            mapped = <IStyleMap>lineOptions;
-                        } else {
-                            lineOptions = this.styles[styleName];
-                        }
-                    } else {
-                        const style = placemarkDom.find('Style');
-                        lineOptions = this.parseStyle(style);
+                let styleDTO: IStyleDTO = {
+                    options: {
+                        strokeColor: 'black', strokeThickness: 1
                     }
+                };
+                if (placemarkDom) {
+                    styleDTO = this.getOptions(placemarkDom, styleDTO.options);
                 }
 
                 let polyline: Microsoft.Maps.Polyline;
-                if (mapped) {
-                    polyline = new Microsoft.Maps.Polyline(vertices, mapped.normal);
-                    this.addMappedStyle(polyline, mapped);
+                if (styleDTO.styleMap) {
+                    polyline = new Microsoft.Maps.Polyline(vertices, styleDTO.styleMap.normal);
+                    this.addMappedStyle(polyline, styleDTO.styleMap);
                 } else {
-                    polyline = new Microsoft.Maps.Polyline(vertices, lineOptions);
+                    polyline = new Microsoft.Maps.Polyline(vertices, styleDTO.options);
                 }
                 return polyline;
             } catch (e) {
@@ -166,35 +138,24 @@ namespace com.koldyr {
                 }
                 const coordinates: JQuery = polygon.find('coordinates');
                 const vertices: Array<Microsoft.Maps.Location> = this.parseVertices(coordinates.html());
-                let polygonOptions: Microsoft.Maps.IPolygonOptions = {
-                    fillColor: null,
-                    strokeColor: 'black',
-                    strokeThickness: 1
+
+                let styleDTO: IStyleDTO = {
+                    options: {
+                        strokeColor: 'black',
+                        strokeThickness: 1
+                    }
                 };
 
-                let mapped: IStyleMap;
                 if (placemarkDom) {
-                    const styleUrl = placemarkDom.find('styleUrl');
-                    if (styleUrl.length > 0) {
-                        const styleName: string = styleUrl.html().substr(1);
-                        polygonOptions = this.styleMap[styleName];
-                        if (polygonOptions) {
-                            mapped = <IStyleMap>polygonOptions;
-                        } else {
-                            polygonOptions = this.styles[styleName];
-                        }
-                    } else {
-                        const style = placemarkDom.find('Style');
-                        polygonOptions = this.parseStyle(style);
-                    }
+                    styleDTO = this.getOptions(placemarkDom, styleDTO.options);
                 }
 
                 var msPolygon: Microsoft.Maps.Polygon;
-                if (mapped) {
-                    msPolygon = new Microsoft.Maps.Polygon(vertices, mapped.normal);
-                    this.addMappedStyle(msPolygon, mapped);
+                if (styleDTO.styleMap) {
+                    msPolygon = new Microsoft.Maps.Polygon(vertices, styleDTO.styleMap.normal);
+                    this.addMappedStyle(msPolygon, styleDTO.styleMap);
                 } else {
-                    msPolygon = new Microsoft.Maps.Polygon(vertices, polygonOptions);
+                    msPolygon = new Microsoft.Maps.Polygon(vertices, styleDTO.options);
                 }
                 return msPolygon;
             } catch (e) {
@@ -353,9 +314,78 @@ namespace com.koldyr {
                 const target: Microsoft.Maps.IPrimitive = <Microsoft.Maps.IPrimitive>event.target;
                 target.setOptions(<Microsoft.Maps.IPrimitiveOptions>target.metadata.styles.normal);
             });
-        };
+        }
 
+        private getOptions(placemarkDom: JQuery, defaultOptions: any): IStyleDTO {
+            let styleMap: IStyleMap;
 
+            const styleUrlDom: JQuery = placemarkDom.find('styleUrl');
+            if (styleUrlDom.length > 0) {
+                var styleUrl = styleUrlDom.html();
+                let styleName = this.getStyleName(styleUrl);
+
+                if (this.isExternalStyle(styleUrl)) {
+                    this.loadExternalStyle(styleUrl)
+                }
+
+                defaultOptions = this.styleMap[styleName];
+
+                if (defaultOptions) {
+                    styleMap = <IStyleMap>defaultOptions;
+                } else {
+                    defaultOptions = this.styles[styleName];
+                }
+            } else {
+                const style = placemarkDom.find('Style');
+                if (style.length > 0) {
+                    defaultOptions = this.parseStyle(style);
+                }
+            }
+
+            const name = placemarkDom.find('name');
+            if (name.length > 0) {
+                console.log(name.html());
+                defaultOptions.title = name.html();
+            }
+            return {options: defaultOptions, styleMap: styleMap};
+        }
+
+        private getStyleName(styleUrl: string): string {
+            var index = styleUrl.lastIndexOf('#');
+            return styleUrl.substr(index + 1);
+        }
+
+        private isExternalStyle(styleUrl: string): boolean {
+            var index = styleUrl.lastIndexOf('#');
+            return index > 0;
+        }
+
+        private loadExternalStyle(styleUrl: string): void {
+            const styleName = this.getStyleName(styleUrl);
+            const style = this.styles[styleName];
+            if (style) {
+                return;
+            }
+
+            var index = styleUrl.lastIndexOf('#');
+            const externalKmlUrl = styleUrl.substring(0, index);
+
+            $.ajax({
+                url: externalKmlUrl,
+                async: false
+            }).then(
+                (data: any) => {
+                    const kmlContent = $(data);
+                    const externalStyles: JQuery = kmlContent.find('Style');
+                    for (var i = 0; i < externalStyles.length; i++) {
+                        var styleDom = $(externalStyles[i]);
+                        if (styleDom.attr('id') === styleName) {
+                            this.styles[styleName] = this.parseStyle(styleDom);
+                        }
+                    }
+                }
+            );
+        }
 
         /**
          * public functions that are available using this object.
