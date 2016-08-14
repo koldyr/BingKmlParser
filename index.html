@@ -4,7 +4,7 @@
     <title>loadMapAsyncHTML</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-    <script type="text/javascript" src="bingKmlParser.js"></script>
+    <script type="text/javascript" src="built/BingKmlParser.js"></script>
 </head>
 <body>
 
@@ -17,6 +17,8 @@
         var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
             credentials: 'ApQ3ZOfrocTSCtnBM8StQfR3Pazht_KQqz8iXgQCUIx-xFb17F83mGOtlRnph_9t'
         });
+
+        var bingKmlParser = new com.koldyr.BingKmlParser();
 
         $.get('https://developers.google.com/kml/documentation/KML_Samples.kml').then(
                 function (data, textStatus, jqXHR) {

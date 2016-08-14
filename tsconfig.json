@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outFile": "built/BingKmlParser.js",
+        "sourceMap": true
+    },
+    "exclude": [
+        "typings"
+    ]
+}
