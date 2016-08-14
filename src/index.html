@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>loadMapAsyncHTML</title>
+    <title>BingKmlParser Example</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
     <script type="text/javascript" src="../built/BingKmlParser.js"></script>
@@ -11,8 +11,6 @@
 <div id='myMap' style='width: 100vw; height: 100vh;'></div>
 
 <script type='text/javascript'>
-
-
     function loadMapScenario() {
         var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
             credentials: 'your_bing_api_key'
@@ -43,13 +41,11 @@
                     });
 
                     var viewPort = Microsoft.Maps.LocationRect.fromLocations(allLocations);
-                    map.setView({bounds: viewPort, zoom: 16});
+                    map.setView({bounds: viewPort});
                 }, function (jqXHR, error) {
                     console.log(error);
                 });
     }
-
-
 </script>
 <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
 </body>
