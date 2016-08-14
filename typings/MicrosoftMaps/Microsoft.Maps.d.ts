@@ -879,7 +879,7 @@ declare module Microsoft.Maps {
         /**
          * Removes all shapes from the collection.
          */
-        public clear();
+        public clear(): void;
 
         /**
          * Gets the item at a specified index.
