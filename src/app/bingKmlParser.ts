@@ -66,7 +66,7 @@ namespace com.koldyr {
                 }
 
                 const coordinates: JQuery = point.find('coordinates');
-                const vertices: Array<Microsoft.Maps.Location> = this.parseVertices(coordinates.html());
+                const vertices: Array<Microsoft.Maps.Location> = this.parseVertices(coordinates.text());
 
                 let styleDTO: IStyleDTO = {
                     options: {icon: BingKmlParser.ICON_URL, anchor: new Microsoft.Maps.Point(12, 39)}
@@ -150,7 +150,7 @@ namespace com.koldyr {
                     styleDTO = this.getOptions(placemarkDom, styleDTO.options);
                 }
 
-                var msPolygon: Microsoft.Maps.Polygon;
+                let msPolygon: Microsoft.Maps.Polygon;
                 if (styleDTO.styleMap) {
                     msPolygon = new Microsoft.Maps.Polygon(vertices, styleDTO.styleMap.normal);
                     this.addMappedStyle(msPolygon, styleDTO.styleMap);
@@ -321,11 +321,11 @@ namespace com.koldyr {
 
             const styleUrlDom: JQuery = placemarkDom.find('styleUrl');
             if (styleUrlDom.length > 0) {
-                var styleUrl = styleUrlDom.html();
+                const styleUrl = styleUrlDom.html();
                 let styleName = this.getStyleName(styleUrl);
 
                 if (this.isExternalStyle(styleUrl)) {
-                    this.loadExternalStyle(styleUrl)
+                    this.loadExternalStyle(styleUrl);
                 }
 
                 defaultOptions = this.styleMap[styleName];
@@ -351,12 +351,12 @@ namespace com.koldyr {
         }
 
         private getStyleName(styleUrl: string): string {
-            var index = styleUrl.lastIndexOf('#');
+            const index = styleUrl.lastIndexOf('#');
             return styleUrl.substr(index + 1);
         }
 
         private isExternalStyle(styleUrl: string): boolean {
-            var index = styleUrl.lastIndexOf('#');
+            const index = styleUrl.lastIndexOf('#');
             return index > 0;
         }
 
@@ -367,7 +367,7 @@ namespace com.koldyr {
                 return;
             }
 
-            var index = styleUrl.lastIndexOf('#');
+            const index = styleUrl.lastIndexOf('#');
             const externalKmlUrl = styleUrl.substring(0, index);
 
             $.ajax({
@@ -377,8 +377,8 @@ namespace com.koldyr {
                 (data: any) => {
                     const kmlContent = $(data);
                     const externalStyles: JQuery = kmlContent.find('Style');
-                    for (var i = 0; i < externalStyles.length; i++) {
-                        var styleDom = $(externalStyles[i]);
+                    for (let i = 0; i < externalStyles.length; i++) {
+                        const styleDom = $(externalStyles[i]);
                         if (styleDom.attr('id') === styleName) {
                             this.styles[styleName] = this.parseStyle(styleDom);
                         }
