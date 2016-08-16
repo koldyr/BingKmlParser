@@ -1,5 +1,10 @@
 namespace com.koldyr {
 
+    export interface IBingKmlResult {
+        geometries: Array<Microsoft.Maps.IPrimitive>;
+        overlays: Array<Microsoft.Maps.CustomOverlay>;
+    }
+
     interface IStyleMap {
         normal: any;
         highlight: any;
@@ -136,8 +141,8 @@ namespace com.koldyr {
                         return null;
                     }
                 }
-                const coordinates: JQuery = polygon.find('coordinates');
-                const vertices: Array<Microsoft.Maps.Location> = this.parseVertices(coordinates.html());
+                const outerCoordinates: JQuery = polygon.find('outerBoundaryIs coordinates');
+                const vertices: Array<Microsoft.Maps.Location> = this.parseVertices(outerCoordinates.html());
 
                 let styleDTO: IStyleDTO = {
                     options: {
@@ -183,6 +188,28 @@ namespace com.koldyr {
             });
 
             return geometries;
+        }
+
+        private parseGroundOverlay(groundOverlayXml: Element): Microsoft.Maps.CustomOverlay {
+            const groundOverlayDom: JQuery = $(groundOverlayXml);
+
+            const name: string = groundOverlayDom.find('name').text();
+            const iconUrl: string = groundOverlayDom.find('Icon href').text();
+
+            const latLonBox: JQuery = groundOverlayDom.find('LatLonBox');
+            const north: string = latLonBox.find('north').text();
+            const south: string = latLonBox.find('south').text();
+            const east: string = latLonBox.find('east').text();
+            const west: string = latLonBox.find('west').text();
+            //const rotation: string = latLonBox.find('rotation').text();
+
+            const bounds = Microsoft.Maps.LocationRect.fromEdges(parseInt(north, 10), parseInt(west, 10), parseInt(south, 10), parseInt(east, 10));
+            return new GroundOverlay({
+                name: name,
+                image: iconUrl,
+                bounds: bounds,
+                beneathLabels: false
+            });
         }
 
         private parseVertices(coordinateString: string): Array<Microsoft.Maps.Location> {
@@ -279,8 +306,7 @@ namespace com.koldyr {
             kmlDom.find('StyleMap').each((index: number, styleMapXml: Element) => {
                 const styleMapDom = $(styleMapXml);
                 const styleMapId = styleMapDom.attr('id');
-                const mappedStyle: IStyleMap = this.parseStyleMap(styleMapDom);
-                this.styleMap[styleMapId] = mappedStyle;
+                this.styleMap[styleMapId] = this.parseStyleMap(styleMapDom);
             });
 
             console.log('Styles loaded');
@@ -390,12 +416,12 @@ namespace com.koldyr {
         /**
          * public functions that are available using this object.
          */
-        public parse(kmlXml: Element): Array<Microsoft.Maps.IPrimitive> {
-            const kmlContent: Array<Microsoft.Maps.IPrimitive> = [];
-
+        public parse(kmlXml: Element): IBingKmlResult {
             const kmlDom = $(kmlXml);
+
             this.parseStyles(kmlDom);
 
+            const kmlContent: Array<Microsoft.Maps.IPrimitive> = [];
             kmlDom.find('Placemark').each((index: number, placemarkXml: Element) => {
                 const placemarkGeometries: Array<Microsoft.Maps.IPrimitive> = this.parsePlacemark(placemarkXml);
                 if (placemarkGeometries) {
@@ -407,7 +433,20 @@ namespace com.koldyr {
 
             console.log('Geometry loaded');
 
-            return kmlContent;
+            const kmlOverlays: Microsoft.Maps.CustomOverlay[] = [];
+            kmlDom.find('GroundOverlay').each((index: number, groundOverlayXml: Element) => {
+                const overlay: Microsoft.Maps.CustomOverlay = this.parseGroundOverlay(groundOverlayXml);
+                if (overlay) {
+                    kmlOverlays.push(overlay);
+                }
+            });
+
+            console.log('Overlays loaded');
+
+            return {
+                geometries: kmlContent,
+                overlays: kmlOverlays
+            };
         }
     }
 }

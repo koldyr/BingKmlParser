@@ -1,3 +1,8 @@
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var com;
 (function (com) {
     var koldyr;
@@ -112,8 +117,8 @@ var com;
                             return null;
                         }
                     }
-                    var coordinates = polygon.find('coordinates');
-                    var vertices = this.parseVertices(coordinates.html());
+                    var outerCoordinates = polygon.find('outerBoundaryIs coordinates');
+                    var vertices = this.parseVertices(outerCoordinates.html());
                     var styleDTO = {
                         options: {
                             strokeColor: 'black',
@@ -154,6 +159,23 @@ var com;
                     geometries.push(_this.parsePolygon(null, $(item)));
                 });
                 return geometries;
+            };
+            BingKmlParser.prototype.parseGroundOverlay = function (groundOverlayXml) {
+                var groundOverlayDom = $(groundOverlayXml);
+                var name = groundOverlayDom.find('name').text();
+                var iconUrl = groundOverlayDom.find('Icon href').text();
+                var latLonBox = groundOverlayDom.find('LatLonBox');
+                var north = latLonBox.find('north').text();
+                var south = latLonBox.find('south').text();
+                var east = latLonBox.find('east').text();
+                var west = latLonBox.find('west').text();
+                var bounds = Microsoft.Maps.LocationRect.fromEdges(parseInt(north, 10), parseInt(west, 10), parseInt(south, 10), parseInt(east, 10));
+                return new koldyr.GroundOverlay({
+                    name: name,
+                    image: iconUrl,
+                    bounds: bounds,
+                    beneathLabels: false
+                });
             };
             BingKmlParser.prototype.parseVertices = function (coordinateString) {
                 var coordinates = $.trim(coordinateString).split(' ');
@@ -223,8 +245,7 @@ var com;
                 kmlDom.find('StyleMap').each(function (index, styleMapXml) {
                     var styleMapDom = $(styleMapXml);
                     var styleMapId = styleMapDom.attr('id');
-                    var mappedStyle = _this.parseStyleMap(styleMapDom);
-                    _this.styleMap[styleMapId] = mappedStyle;
+                    _this.styleMap[styleMapId] = _this.parseStyleMap(styleMapDom);
                 });
                 console.log('Styles loaded');
             };
@@ -316,9 +337,9 @@ var com;
             };
             BingKmlParser.prototype.parse = function (kmlXml) {
                 var _this = this;
-                var kmlContent = [];
                 var kmlDom = $(kmlXml);
                 this.parseStyles(kmlDom);
+                var kmlContent = [];
                 kmlDom.find('Placemark').each(function (index, placemarkXml) {
                     var placemarkGeometries = _this.parsePlacemark(placemarkXml);
                     if (placemarkGeometries) {
@@ -328,12 +349,62 @@ var com;
                     }
                 });
                 console.log('Geometry loaded');
-                return kmlContent;
+                var kmlOverlays = [];
+                kmlDom.find('GroundOverlay').each(function (index, groundOverlayXml) {
+                    var overlay = _this.parseGroundOverlay(groundOverlayXml);
+                    if (overlay) {
+                        kmlOverlays.push(overlay);
+                    }
+                });
+                console.log('Overlays loaded');
+                return {
+                    geometries: kmlContent,
+                    overlays: kmlOverlays
+                };
             };
             BingKmlParser.ICON_URL = 'https://www.bingmapsportal.com/Content/images/poi_custom.png';
             return BingKmlParser;
         }());
         koldyr.BingKmlParser = BingKmlParser;
+    })(koldyr = com.koldyr || (com.koldyr = {}));
+})(com || (com = {}));
+var com;
+(function (com) {
+    var koldyr;
+    (function (koldyr) {
+        var GroundOverlay = (function (_super) {
+            __extends(GroundOverlay, _super);
+            function GroundOverlay(options) {
+                _super.call(this, options);
+                this.options = options;
+            }
+            GroundOverlay.prototype.onAdd = function () {
+                this.img = document.createElement('img');
+                this.img.src = this.options.image;
+                this.img.style.width = '100%';
+                this.img.style.height = '100%';
+                this.img.style.position = 'absolute';
+                this.setHtmlElement(this.img);
+            };
+            GroundOverlay.prototype.onRemove = function () {
+                this.setHtmlElement(null);
+            };
+            GroundOverlay.prototype.onLoad = function () {
+                this.repositionOverlay();
+                var self = this;
+                Microsoft.Maps.Events.addHandler(this._map, 'viewchange', function () { return self.repositionOverlay(); });
+            };
+            GroundOverlay.prototype.repositionOverlay = function () {
+                var topLeft = this._map.tryLocationToPixel(this.options.bounds.getNorthwest(), Microsoft.Maps.PixelReference.control);
+                var bottomRight = this._map.tryLocationToPixel(this.options.bounds.getSoutheast(), Microsoft.Maps.PixelReference.control);
+                this.img.style.left = topLeft.x + 'px';
+                this.img.style.top = topLeft.y + 'px';
+                this.img.style.width = (bottomRight.x - topLeft.x) + 'px';
+                this.img.style.height = (bottomRight.y - topLeft.y) + 'px';
+            };
+            return GroundOverlay;
+        }(Microsoft.Maps.CustomOverlay));
+        koldyr.GroundOverlay = GroundOverlay;
     })(koldyr = com.koldyr || (com.koldyr = {}));
 })(com || (com = {}));
 
