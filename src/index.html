@@ -4,49 +4,59 @@
     <title>BingKmlParser Example</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-    <script type="text/javascript" src="../built/BingKmlParser.js"></script>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
+
+    <script type='text/javascript'>
+        var map;
+
+        function loadMapScenario() {
+            map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+                credentials: 'your_bing_api_key'
+            });
+
+            Microsoft.Maps.registerModule('BingKmlParser', '../built/BingKmlParser.js');
+            Microsoft.Maps.loadModule('BingKmlParser', bingKmlParserLoaded);
+        }
+
+        function bingKmlParserLoaded() {
+            var bingKmlParser = new com.koldyr.BingKmlParser();
+//        var url = 'http://analyticalgraphicsinc.github.io/cesium-google-earth-examples/sampleData/kml/MaineScubaDiving.kml';
+            var url = 'https://developers.google.com/kml/documentation/KML_Samples.kml';
+            $.get(url).then(
+                    function (data, textStatus, jqXHR) {
+                        var geometries = bingKmlParser.parse(data);
+
+                        var allLocations = [];
+                        $.each(geometries.geometries, function (index, item) {
+                            if (item instanceof Microsoft.Maps.Pushpin) {
+                                allLocations.push(item.getLocation());
+                            } else if (item instanceof Microsoft.Maps.Polyline || item instanceof Microsoft.Maps.Polygon) {
+                                var locations = item.getLocations();
+                                for (var i = 0; i < locations.length; i++) {
+                                    var location = locations[i];
+                                    allLocations.push(location);
+                                }
+                            }
+
+                            if (item) {
+                                map.entities.push(item);
+                            }
+                        });
+
+                        var viewPort = Microsoft.Maps.LocationRect.fromLocations(allLocations);
+                        map.setView({bounds: viewPort});
+
+                        map.layers.insertAll(geometries.overlays);
+                    }, function (jqXHR, error) {
+                        console.log(error);
+                    });
+        }
+    </script>
+
 </head>
 <body>
 
 <div id='myMap' style='width: 100vw; height: 100vh;'></div>
 
-<script type='text/javascript'>
-    function loadMapScenario() {
-        var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {
-            credentials: 'your_bing_api_key'
-        });
-
-        var bingKmlParser = new com.koldyr.BingKmlParser();
-//        var url = 'http://analyticalgraphicsinc.github.io/cesium-google-earth-examples/sampleData/kml/MaineScubaDiving.kml';
-        var url = 'https://developers.google.com/kml/documentation/KML_Samples.kml';
-        $.get(url).then(
-                function (data, textStatus, jqXHR) {
-                    var geometries = bingKmlParser.parse(data);
-
-                    var allLocations = [];
-                    $.each(geometries, function (index, item) {
-                        if (item instanceof Microsoft.Maps.Pushpin) {
-                            allLocations.push(item.getLocation());
-                        } else if (item instanceof Microsoft.Maps.Polyline || item instanceof Microsoft.Maps.Polygon) {
-                            var locations = item.getLocations();
-                            for (var i = 0; i < locations.length; i++) {
-                                var location = locations[i];
-                                allLocations.push(location);
-                            }
-                        }
-
-                        if (item) {
-                            map.entities.push(item);
-                        }
-                    });
-
-                    var viewPort = Microsoft.Maps.LocationRect.fromLocations(allLocations);
-                    map.setView({bounds: viewPort});
-                }, function (jqXHR, error) {
-                    console.log(error);
-                });
-    }
-</script>
-<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
 </body>
 </html>

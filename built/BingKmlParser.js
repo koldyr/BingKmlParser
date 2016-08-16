@@ -7,6 +7,39 @@ var com;
 (function (com) {
     var koldyr;
     (function (koldyr) {
+        var GroundOverlay = (function (_super) {
+            __extends(GroundOverlay, _super);
+            function GroundOverlay(options) {
+                _super.call(this, options);
+                this.options = options;
+            }
+            GroundOverlay.prototype.onAdd = function () {
+                this.img = document.createElement('img');
+                this.img.src = this.options.image;
+                this.img.style.width = '100%';
+                this.img.style.height = '100%';
+                this.img.style.position = 'absolute';
+                this.setHtmlElement(this.img);
+            };
+            GroundOverlay.prototype.onRemove = function () {
+                this.setHtmlElement(null);
+            };
+            GroundOverlay.prototype.onLoad = function () {
+                this.repositionOverlay();
+                var self = this;
+                Microsoft.Maps.Events.addHandler(this._map, 'viewchange', function () { return self.repositionOverlay(); });
+            };
+            GroundOverlay.prototype.repositionOverlay = function () {
+                var topLeft = this._map.tryLocationToPixel(this.options.bounds.getNorthwest(), Microsoft.Maps.PixelReference.control);
+                var bottomRight = this._map.tryLocationToPixel(this.options.bounds.getSoutheast(), Microsoft.Maps.PixelReference.control);
+                this.img.style.left = topLeft.x + 'px';
+                this.img.style.top = topLeft.y + 'px';
+                this.img.style.width = (bottomRight.x - topLeft.x) + 'px';
+                this.img.style.height = (bottomRight.y - topLeft.y) + 'px';
+            };
+            return GroundOverlay;
+        }(Microsoft.Maps.CustomOverlay));
+        koldyr.GroundOverlay = GroundOverlay;
         var BingKmlParser = (function () {
             function BingKmlParser() {
                 this.styles = {};
@@ -117,8 +150,18 @@ var com;
                             return null;
                         }
                     }
+                    var vertices = [];
                     var outerCoordinates = polygon.find('outerBoundaryIs coordinates');
-                    var vertices = this.parseVertices(outerCoordinates.html());
+                    var outerVertices = this.parseVertices(outerCoordinates.html());
+                    var innerCoordinates = polygon.find('innerBoundaryIs coordinates');
+                    if (innerCoordinates.length > 0) {
+                        var innerVertices = this.parseVertices(innerCoordinates.html());
+                        vertices.push(outerVertices);
+                        vertices.push(innerVertices);
+                    }
+                    else {
+                        vertices = outerVertices;
+                    }
                     var styleDTO = {
                         options: {
                             strokeColor: 'black',
@@ -170,7 +213,7 @@ var com;
                 var east = latLonBox.find('east').text();
                 var west = latLonBox.find('west').text();
                 var bounds = Microsoft.Maps.LocationRect.fromEdges(parseInt(north, 10), parseInt(west, 10), parseInt(south, 10), parseInt(east, 10));
-                return new koldyr.GroundOverlay({
+                return new GroundOverlay({
                     name: name,
                     image: iconUrl,
                     bounds: bounds,
@@ -299,7 +342,6 @@ var com;
                 }
                 var name = placemarkDom.find('name');
                 if (name.length > 0) {
-                    console.log(name.html());
                     defaultOptions.title = name.html();
                 }
                 return { options: defaultOptions, styleMap: styleMap };
@@ -331,6 +373,7 @@ var com;
                         var styleDom = $(externalStyles[i]);
                         if (styleDom.attr('id') === styleName) {
                             _this.styles[styleName] = _this.parseStyle(styleDom);
+                            break;
                         }
                     }
                 });
@@ -366,45 +409,7 @@ var com;
             return BingKmlParser;
         }());
         koldyr.BingKmlParser = BingKmlParser;
-    })(koldyr = com.koldyr || (com.koldyr = {}));
-})(com || (com = {}));
-var com;
-(function (com) {
-    var koldyr;
-    (function (koldyr) {
-        var GroundOverlay = (function (_super) {
-            __extends(GroundOverlay, _super);
-            function GroundOverlay(options) {
-                _super.call(this, options);
-                this.options = options;
-            }
-            GroundOverlay.prototype.onAdd = function () {
-                this.img = document.createElement('img');
-                this.img.src = this.options.image;
-                this.img.style.width = '100%';
-                this.img.style.height = '100%';
-                this.img.style.position = 'absolute';
-                this.setHtmlElement(this.img);
-            };
-            GroundOverlay.prototype.onRemove = function () {
-                this.setHtmlElement(null);
-            };
-            GroundOverlay.prototype.onLoad = function () {
-                this.repositionOverlay();
-                var self = this;
-                Microsoft.Maps.Events.addHandler(this._map, 'viewchange', function () { return self.repositionOverlay(); });
-            };
-            GroundOverlay.prototype.repositionOverlay = function () {
-                var topLeft = this._map.tryLocationToPixel(this.options.bounds.getNorthwest(), Microsoft.Maps.PixelReference.control);
-                var bottomRight = this._map.tryLocationToPixel(this.options.bounds.getSoutheast(), Microsoft.Maps.PixelReference.control);
-                this.img.style.left = topLeft.x + 'px';
-                this.img.style.top = topLeft.y + 'px';
-                this.img.style.width = (bottomRight.x - topLeft.x) + 'px';
-                this.img.style.height = (bottomRight.y - topLeft.y) + 'px';
-            };
-            return GroundOverlay;
-        }(Microsoft.Maps.CustomOverlay));
-        koldyr.GroundOverlay = GroundOverlay;
+        Microsoft.Maps.moduleLoaded('BingKmlParser');
     })(koldyr = com.koldyr || (com.koldyr = {}));
 })(com || (com = {}));
 

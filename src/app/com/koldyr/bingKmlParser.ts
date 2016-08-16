@@ -15,6 +15,53 @@ namespace com.koldyr {
         options?: any;
     }
 
+    export interface IGroundOverlayOptions extends Microsoft.Maps.ICustomOverlayOptions {
+        name: string;
+        bounds: Microsoft.Maps.LocationRect;
+        image: string;
+    }
+
+    export class GroundOverlay extends Microsoft.Maps.CustomOverlay {
+
+        private options: IGroundOverlayOptions;
+        private img: HTMLImageElement;
+
+        constructor(options: IGroundOverlayOptions) {
+            super(options);
+            this.options = options;
+        }
+
+        public onAdd(): void {
+            this.img = document.createElement('img');
+            this.img.src = this.options.image;
+            this.img.style.width = '100%';
+            this.img.style.height = '100%';
+            this.img.style.position = 'absolute';
+            this.setHtmlElement(this.img);
+        }
+
+        public onRemove(): void {
+            this.setHtmlElement(null);
+        }
+
+        public onLoad(): void {
+            this.repositionOverlay();
+
+            const self = this;
+            Microsoft.Maps.Events.addHandler(this._map, 'viewchange', () => self.repositionOverlay());
+        }
+
+        private repositionOverlay(): void {
+            const topLeft: Microsoft.Maps.Point = <Microsoft.Maps.Point>this._map.tryLocationToPixel(this.options.bounds.getNorthwest(), Microsoft.Maps.PixelReference.control);
+            const bottomRight: Microsoft.Maps.Point = <Microsoft.Maps.Point>this._map.tryLocationToPixel(this.options.bounds.getSoutheast(), Microsoft.Maps.PixelReference.control);
+
+            this.img.style.left = topLeft.x + 'px';
+            this.img.style.top = topLeft.y + 'px';
+            this.img.style.width = (bottomRight.x - topLeft.x) + 'px';
+            this.img.style.height = (bottomRight.y - topLeft.y) + 'px';
+        }
+    }
+
     export class BingKmlParser {
 
         static ICON_URL: string = 'https://www.bingmapsportal.com/Content/images/poi_custom.png';
@@ -141,8 +188,20 @@ namespace com.koldyr {
                         return null;
                     }
                 }
+
+                let vertices: Array<any> = [];
+
                 const outerCoordinates: JQuery = polygon.find('outerBoundaryIs coordinates');
-                const vertices: Array<Microsoft.Maps.Location> = this.parseVertices(outerCoordinates.html());
+                const outerVertices: Array<Microsoft.Maps.Location> = this.parseVertices(outerCoordinates.html());
+
+                const innerCoordinates: JQuery = polygon.find('innerBoundaryIs coordinates');
+                if (innerCoordinates.length > 0) {
+                    const innerVertices: Array<Microsoft.Maps.Location> = this.parseVertices(innerCoordinates.html());
+                    vertices.push(outerVertices);
+                    vertices.push(innerVertices);
+                } else {
+                    vertices = outerVertices;
+                }
 
                 let styleDTO: IStyleDTO = {
                     options: {
@@ -203,7 +262,7 @@ namespace com.koldyr {
             const west: string = latLonBox.find('west').text();
             //const rotation: string = latLonBox.find('rotation').text();
 
-            const bounds = Microsoft.Maps.LocationRect.fromEdges(parseInt(north, 10), parseInt(west, 10), parseInt(south, 10), parseInt(east, 10));
+            const bounds = Microsoft.Maps.LocationRect.fromEdges(parseFloat(north), parseFloat(west), parseFloat(south), parseFloat(east));
             return new GroundOverlay({
                 name: name,
                 image: iconUrl,
@@ -370,7 +429,6 @@ namespace com.koldyr {
 
             const name = placemarkDom.find('name');
             if (name.length > 0) {
-                console.log(name.html());
                 defaultOptions.title = name.html();
             }
             return {options: defaultOptions, styleMap: styleMap};
@@ -407,6 +465,7 @@ namespace com.koldyr {
                         const styleDom = $(externalStyles[i]);
                         if (styleDom.attr('id') === styleName) {
                             this.styles[styleName] = this.parseStyle(styleDom);
+                            break;
                         }
                     }
                 }
@@ -449,4 +508,6 @@ namespace com.koldyr {
             };
         }
     }
+
+    Microsoft.Maps.moduleLoaded('BingKmlParser');
 }
