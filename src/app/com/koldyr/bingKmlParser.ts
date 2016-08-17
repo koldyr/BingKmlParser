@@ -12,7 +12,7 @@ namespace com.koldyr {
 
     interface IStyleDTO {
         styleMap?: IStyleMap;
-        options?: any;
+        options?: Microsoft.Maps.IPushpinOptions | Microsoft.Maps.IPolylineOptions | Microsoft.Maps.IPolygonOptions;
     }
 
     export interface IGroundOverlayOptions extends Microsoft.Maps.ICustomOverlayOptions {
@@ -372,17 +372,17 @@ namespace com.koldyr {
         }
 
         private parseStyleMap(styleMapDom: JQuery): IStyleMap {
-            const styles: any = {};
+            const styleMap: any = {};
 
             const self = this;
             styleMapDom.find('Pair').each((index: number, pair: Element) => {
                 const pairDom = $(pair);
                 const key = pairDom.find('key').html();
                 const style = pairDom.find('styleUrl').html().substr(1);
-                styles[key] = self.styles[style];
+                styleMap[key] = self.styles[style];
             });
 
-            return styles;
+            return styleMap;
         }
 
         private addMappedStyle(geometry: Microsoft.Maps.IPrimitive, mapped: IStyleMap): void {

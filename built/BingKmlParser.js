@@ -212,7 +212,7 @@ var com;
                 var south = latLonBox.find('south').text();
                 var east = latLonBox.find('east').text();
                 var west = latLonBox.find('west').text();
-                var bounds = Microsoft.Maps.LocationRect.fromEdges(parseInt(north, 10), parseInt(west, 10), parseInt(south, 10), parseInt(east, 10));
+                var bounds = Microsoft.Maps.LocationRect.fromEdges(parseFloat(north), parseFloat(west), parseFloat(south), parseFloat(east));
                 return new GroundOverlay({
                     name: name,
                     image: iconUrl,
@@ -293,15 +293,15 @@ var com;
                 console.log('Styles loaded');
             };
             BingKmlParser.prototype.parseStyleMap = function (styleMapDom) {
-                var styles = {};
+                var styleMap = {};
                 var self = this;
                 styleMapDom.find('Pair').each(function (index, pair) {
                     var pairDom = $(pair);
                     var key = pairDom.find('key').html();
                     var style = pairDom.find('styleUrl').html().substr(1);
-                    styles[key] = self.styles[style];
+                    styleMap[key] = self.styles[style];
                 });
-                return styles;
+                return styleMap;
             };
             BingKmlParser.prototype.addMappedStyle = function (geometry, mapped) {
                 if (!geometry.metadata) {
