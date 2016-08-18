@@ -9,4 +9,5 @@ Parser for kml data to be used with [Bing Maps API](https://www.microsoft.com/ma
     * Style
     * StyleMap
     * External Style
+    * GroundOverlay (experimental)
 * [Usage example](src/index.html)
