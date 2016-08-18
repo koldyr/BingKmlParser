@@ -19,6 +19,7 @@ namespace com.koldyr {
         name: string;
         bounds: Microsoft.Maps.LocationRect;
         image: string;
+        rotate?: string;
     }
 
     export class GroundOverlay extends Microsoft.Maps.CustomOverlay {
@@ -37,6 +38,15 @@ namespace com.koldyr {
             this.img.style.width = '100%';
             this.img.style.height = '100%';
             this.img.style.position = 'absolute';
+            if (this.options.rotate) {
+                const transform: string = `rotate(${this.options.rotate}deg)`;
+                const style: any = this.img.style;
+                style['-webkit-transform'] = transform;
+                style['-moz-transform'] = transform;
+                style['-ms-transform'] = transform;
+                style['-o-transform'] = transform;
+                style['transform'] = transform;
+            }
             this.setHtmlElement(this.img);
         }
 
@@ -260,14 +270,15 @@ namespace com.koldyr {
             const south: string = latLonBox.find('south').text();
             const east: string = latLonBox.find('east').text();
             const west: string = latLonBox.find('west').text();
-            //const rotation: string = latLonBox.find('rotation').text();
+            const rotation: string = latLonBox.find('rotation').text();
 
             const bounds = Microsoft.Maps.LocationRect.fromEdges(parseFloat(north), parseFloat(west), parseFloat(south), parseFloat(east));
             return new GroundOverlay({
                 name: name,
                 image: iconUrl,
                 bounds: bounds,
-                beneathLabels: false
+                rotate: rotation,
+                beneathLabels: true
             });
         }
 

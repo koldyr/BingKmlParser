@@ -19,6 +19,15 @@ var com;
                 this.img.style.width = '100%';
                 this.img.style.height = '100%';
                 this.img.style.position = 'absolute';
+                if (this.options.rotate) {
+                    var transform = "rotate(" + this.options.rotate + "deg)";
+                    var style = this.img.style;
+                    style['-webkit-transform'] = transform;
+                    style['-moz-transform'] = transform;
+                    style['-ms-transform'] = transform;
+                    style['-o-transform'] = transform;
+                    style['transform'] = transform;
+                }
                 this.setHtmlElement(this.img);
             };
             GroundOverlay.prototype.onRemove = function () {
@@ -212,12 +221,14 @@ var com;
                 var south = latLonBox.find('south').text();
                 var east = latLonBox.find('east').text();
                 var west = latLonBox.find('west').text();
+                var rotation = latLonBox.find('rotation').text();
                 var bounds = Microsoft.Maps.LocationRect.fromEdges(parseFloat(north), parseFloat(west), parseFloat(south), parseFloat(east));
                 return new GroundOverlay({
                     name: name,
                     image: iconUrl,
                     bounds: bounds,
-                    beneathLabels: false
+                    rotate: rotation,
+                    beneathLabels: true
                 });
             };
             BingKmlParser.prototype.parseVertices = function (coordinateString) {
