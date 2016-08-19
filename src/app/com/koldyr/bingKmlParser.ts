@@ -57,8 +57,7 @@ namespace com.koldyr {
         public onLoad(): void {
             this.repositionOverlay();
 
-            const self = this;
-            Microsoft.Maps.Events.addHandler(this._map, 'viewchange', () => self.repositionOverlay());
+            Microsoft.Maps.Events.addHandler(this._map, 'viewchange', () => this.repositionOverlay());
         }
 
         private repositionOverlay(): void {
@@ -270,7 +269,12 @@ namespace com.koldyr {
             const south: string = latLonBox.find('south').text();
             const east: string = latLonBox.find('east').text();
             const west: string = latLonBox.find('west').text();
-            const rotation: string = latLonBox.find('rotation').text();
+
+            const rotationElem = latLonBox.find('rotation');
+            let rotation: string;
+            if (rotationElem.length > 0) {
+                rotation = rotationElem.text();
+            }
 
             const bounds = Microsoft.Maps.LocationRect.fromEdges(parseFloat(north), parseFloat(west), parseFloat(south), parseFloat(east));
             return new GroundOverlay({
