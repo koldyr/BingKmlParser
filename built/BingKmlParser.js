@@ -34,9 +34,9 @@ var com;
                 this.setHtmlElement(null);
             };
             GroundOverlay.prototype.onLoad = function () {
+                var _this = this;
                 this.repositionOverlay();
-                var self = this;
-                Microsoft.Maps.Events.addHandler(this._map, 'viewchange', function () { return self.repositionOverlay(); });
+                Microsoft.Maps.Events.addHandler(this._map, 'viewchange', function () { return _this.repositionOverlay(); });
             };
             GroundOverlay.prototype.repositionOverlay = function () {
                 var topLeft = this._map.tryLocationToPixel(this.options.bounds.getNorthwest(), Microsoft.Maps.PixelReference.control);
@@ -49,6 +49,12 @@ var com;
             return GroundOverlay;
         }(Microsoft.Maps.CustomOverlay));
         koldyr.GroundOverlay = GroundOverlay;
+    })(koldyr = com.koldyr || (com.koldyr = {}));
+})(com || (com = {}));
+var com;
+(function (com) {
+    var koldyr;
+    (function (koldyr) {
         var BingKmlParser = (function () {
             function BingKmlParser() {
                 this.styles = {};
@@ -221,9 +227,13 @@ var com;
                 var south = latLonBox.find('south').text();
                 var east = latLonBox.find('east').text();
                 var west = latLonBox.find('west').text();
-                var rotation = latLonBox.find('rotation').text();
+                var rotationElem = latLonBox.find('rotation');
+                var rotation;
+                if (rotationElem.length > 0) {
+                    rotation = rotationElem.text();
+                }
                 var bounds = Microsoft.Maps.LocationRect.fromEdges(parseFloat(north), parseFloat(west), parseFloat(south), parseFloat(east));
-                return new GroundOverlay({
+                return new koldyr.GroundOverlay({
                     name: name,
                     image: iconUrl,
                     bounds: bounds,
