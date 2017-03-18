@@ -2,11 +2,11 @@
 <html>
 <head>
     <title>BingKmlParser Example</title>
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.js"></script>
-    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario' async defer></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.0.js"></script>
+    <script type="text/javascript" src="http://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario" async defer></script>
 
-    <script type='text/javascript'>
+    <script type="text/javascript">
         var map;
 
         function loadMapScenario() {
@@ -14,14 +14,16 @@
                 credentials: 'your_bing_key'
             });
 
-            Microsoft.Maps.registerModule('BingKmlParser', '../built/BingKmlParser.js');
+            Microsoft.Maps.registerModule('BingKmlParser', 'BingKmlParser.js');
             Microsoft.Maps.loadModule('BingKmlParser', bingKmlParserLoaded);
         }
 
         function bingKmlParserLoaded() {
             var bingKmlParser = new com.koldyr.BingKmlParser();
-//        var url = 'http://analyticalgraphicsinc.github.io/cesium-google-earth-examples/sampleData/kml/MaineScubaDiving.kml';
-            var url = 'https://developers.google.com/kml/documentation/KML_Samples.kml';
+//            var url = 'http://analyticalgraphicsinc.github.io/cesium-google-earth-examples/sampleData/kml/MaineScubaDiving.kml';
+//            var url = 'https://developers.google.com/kml/documentation/KML_Samples.kml';
+            var url = 'KML_Samples.kml';
+//            var url = 'regions.kml';
             $.get(url).then(function (data, textStatus, jqXHR) {
                 var geometries = bingKmlParser.parse(data);
 
@@ -58,7 +60,7 @@
 </head>
 <body>
 
-<div id='bingMap' style='width: 100vw; height: 100vh;'></div>
+<div id="bingMap" style="width: 90vw; height: 90vh;"></div>
 
 </body>
 </html>

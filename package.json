@@ -2,7 +2,7 @@
     "name": "bing-kml-parser",
     "version": "0.0.1",
     "description": "Parser to convert KML geometry to Bing Maps API geometries ",
-    "main": "bingKmlParser.js",
+    "main": "BingKmlParser.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -16,19 +16,23 @@
         "parser"
     ],
     "author": "d.halitski@gmail.com",
-    "license": "ISC",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/koldyr/BingKmlParser/issues"
     },
     "homepage": "https://github.com/koldyr/BingKmlParser#readme",
     "devDependencies": {
+        "del": "1.2.1",
         "gulp": "^3.9.1",
-        "gulp-debug": "^2.1.2",
-        "gulp-inject": "^4.1.0",
-        "gulp-sourcemaps": "^1.6.0",
-        "gulp-tslint": "3.3.1",
-        "gulp-typescript": "^2.13.6",
-        "gulp-rimraf": "^0.2.0",
-        "del": "1.2.1"
+        "gulp-concat": "^2.6.1",
+        "gulp-debug": "^3.1.0",
+        "gulp-inject": "^4.2.0",
+        "gulp-load-plugins": "^1.5.0",
+        "gulp-rimraf": "^0.2.1",
+        "gulp-sourcemaps": "2.4.1",
+        "gulp-tslint": "7.1.0",
+        "gulp-typescript": "^3.1.6",
+        "tslint": "^4",
+        "typescript": "^2"
     }
 }
