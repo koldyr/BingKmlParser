@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Jasmine Spec Runner v2.4.1</title>
+
+    <link rel="shortcut icon" type="image/png" href="../node_modules/jasmine-core/images/jasmine_favicon.png">
+    <link rel="stylesheet" href="../node_modules/jasmine-core/lib/jasmine-core/jasmine.css">
+
+    <style>
+        #bingMap {
+            position: absolute;
+            bottom: 0;
+            left: 40%;
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
+    <script src="../node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.0.js"></script>
+    <script type="text/javascript" src="http://www.bing.com/api/maps/mapcontrol?branch=release&callback=loadMapScenario" async defer></script>
+
+    <script type="text/javascript">
+        let map;
+
+        function loadMapScenario() {
+            map = new Microsoft.Maps.Map(document.getElementById('bingMap'), {
+                credentials: 'ApQ3ZOfrocTSCtnBM8StQfR3Pazht_KQqz8iXgQCUIx-xFb17F83mGOtlRnph_9t'
+            });
+
+            Microsoft.Maps.registerModule('BingKmlParser', '../dist/BingKmlParser.js');
+            Microsoft.Maps.loadModule('BingKmlParser', bingKmlParserLoaded);
+        }
+
+        function bingKmlParserLoaded() {
+            let script = document.createElement('script');
+            script.src = 'BingKmlParser.spec.js';
+            document.body.appendChild(script);
+        }
+    </script>
+</head>
+
+<body>
+<div id="bingMap"></div>
+</body>
+</html>

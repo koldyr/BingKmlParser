@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+    <Document>
+        <Style id="iconStyle">
+            <IconStyle>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/pal4/icon28.png</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Style id="lineStyle">
+            <LineStyle>
+                <width>2</width>
+            </LineStyle>
+        </Style>
+        <Style id="polyStyle">
+            <PolyStyle>
+                <color>7f00ff00</color>
+            </PolyStyle>
+        </Style>
+        <Style id="labelStyle">
+            <LabelStyle>
+                <color>7f00ff00</color>
+                <scale>0.5</scale>
+            </LabelStyle>
+        </Style>
+        <Style id="listStyle">
+            <ListStyle>
+                <bgColor>7f00ff00</bgColor>
+                <ItemIcon>
+                    <href>http://maps.google.com/mapfiles/kml/pal4/icon28.png</href>
+                </ItemIcon>
+            </ListStyle>
+        </Style>
+        <Style id="balloonStyle">
+            <BalloonStyle>
+                <text><![CDATA[<b>$[name]</b><br/><br/>$[description]]]></text>
+            </BalloonStyle>
+        </Style>
+    </Document>
+</kml>

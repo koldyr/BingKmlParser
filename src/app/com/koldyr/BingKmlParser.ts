@@ -21,9 +21,9 @@ namespace com.koldyr {
 
         static ICON_URL: string = 'https://www.bingmapsportal.com/Content/images/poi_custom.png';
 
-        private styles: any = {};
+        public styles: any = {};
 
-        private styleMap: any = {};
+        public styleMap: any = {};
 
         /**
          * @param placemarkXml

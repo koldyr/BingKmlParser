@@ -3,6 +3,10 @@
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
 
+const jasmine = require('gulp-jasmine');
+const reporters = require('jasmine-reporters');
+const open = require('gulp-open');
+
 const Config = require('./gulpfile.config');
 const config = new Config();
 
@@ -11,9 +15,9 @@ const config = new Config();
  */
 gulp.task('clean', function (cb) {
     const typeScriptGenFiles = [
-        config.tsOutputPath + '/**/*.js',    // path to all JS files auto gen'd by editor
-        config.tsOutputPath + '/**/*.js.map', // path to all sourcemap files auto gen'd by editor
-        config.tsOutputPath + '/**/*.html', // path to all sourcemap files auto gen'd by editor
+        config.tsOutputPath + '/**/*.js',
+        config.tsOutputPath + '/**/*.js.map',
+        config.tsOutputPath + '/**/*.html',
         '!' + config.tsOutputPath + '/lib'
     ];
 
@@ -51,6 +55,8 @@ gulp.task('compile', function () {
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.typescript({
                 target: 'ES5',
+                module: "commonjs",
+                moduleResolution: "node",
                 declarationFiles: false,
                 noResolve: true,
                 noEmitOnError: true,
@@ -66,5 +72,12 @@ gulp.task('watch', function () {
     gulp.watch([config.allTypeScript], ['ts-lint', 'compile']);
 });
 
+gulp.task('build', (callback) => {
+    require('run-sequence')('clean', 'ts-lint', 'copy-html', 'compile', callback);
+});
 
-gulp.task('default', ['clean', 'ts-lint', 'copy-html', 'compile']);
+gulp.task('test', ['build'], function(){
+    gulp.src('./spec/SpecRunner.html')
+        .pipe(open());
+});
+
